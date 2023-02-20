@@ -4,7 +4,7 @@ object Const {
 
     const val JSON_NAME_FILE = "ModuleGenerator"
 
-    const val CREATE_FROM_TEMPLATES = "Create from templates"
+    const val CREATE_FROM_TEMPLATES = "Generate from templates"
     const val CHOOSE_TEMPLATE = "Choose template"
     const val TEMPLATES = "Templates"
     const val TARGET_PATH = "Target path"
