@@ -1,32 +1,53 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>ru.vassuv.demo_plugin</id>
+    <id>ru.vassuv.plugin.create_from_template</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Demo</name>
+    <name>Create from {{TEMPLATE}}</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="vassuv@ya.com" url="https://t.me/vassuv">vassuv(Telegram)</vendor>
+    <vendor email="vassuv@ya.ru" url="https://t.me/vassuv">vassuv(Telegram)</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Test plugin.<br>
-    <em>- nothing</em>
+     Plugin for generating modules from templates<br><br>
+
+     <em><b>To create a new template:</b><br>
+     - open the folder ".template" in the root of the project<br>
+     - add a new folder with "cookiecutter.json" file with properties <br>
+       (example: /.templates/Demo/cookiecutter.json) <br>
+     - add files and folders for your template to a new folder<br>
+       (examples: /.tempalates/Demo/MyProject.txt , /.tempalates/Demo/MyFolder/MyFile.txt ) <br>
+     </em>
+
+     <em><b>To activate the function:</b><br>
+     - right click on target folder<br>
+     - click on "Create"<br>
+     - click on "Create a new TEMPLATE"<br>
+     - select template<br>
+     - set properties<br><br>
+     </em>
+
+     <em><b>To change properties in a template:</b><br>
+     - replace all necessary substrings with the property name specified in json and wrapped in double curly braces<br>
+     (An example template with example properties will appear in your project when you first activate the plugin) <br><br>
+
+     <b>* You should have your templates in the /.templates folder at the root of your project</b>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>org.intellij.groovy</depends>
-    <depends>com.intellij.forms_rt</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.xml</depends>
-<!--    <depends>com.intellij.css</depends>-->
+    <depends>com.intellij.modules.all</depends>
     <depends>org.jetbrains.kotlin</depends>
+
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
@@ -35,15 +56,17 @@
     </extensions>
 
 
-    <idea-version since-build="163"/>
+    <idea-version since-build="221"/>
     <actions>
-        <group description="My actions" id="MyActionGroup" text="My actions">
+        <group description="Create from Template actions" id="CustomTemplateAction" text="Generate from Template">
             <separator/>
 
-            <action id="com.example.demo.OpenHelloWorldAction"
-                    class="com.example.demo.OpenHelloWorldAction"
-                    text="Show Hello world" description="Open dialog">
-                <add-to-group group-id="NewGroup" anchor="last"/>
+            <action id="ru.vassuv.plugin.createfromtemplate.CreateFromTemplateAction"
+                    class="ru.vassuv.plugin.createfromtemplate.CreateFromTemplateAction"
+                    icon="AllIcons.Actions.Copy"
+                    text="Generate from TEMPLATE"
+                    description="Open dialog wizard for generating module or package from template">
+                <add-to-group group-id="NewGroup" anchor="first"/>
             </action>
         </group>
     </actions>

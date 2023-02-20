@@ -4,14 +4,16 @@ plugins {
     id("org.jetbrains.intellij") version "1.5.2"
 }
 
-group = "com.example"
-version = "1.0-SNAPSHOT"
+group = "com.vassuv.plugin.createfromtemplate"
+version = "0.1-alpha"
 
 repositories {
     mavenCentral()
 }
+
 dependencies {
-    implementation ("com.intellij:forms_rt:7.0.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
+    implementation("com.google.code.gson:gson:2.8.5")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -34,7 +36,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("212")
-        untilBuild.set("222.*")
+//        untilBuild.set("222.*")
     }
 
     signPlugin {
@@ -45,5 +47,6 @@ tasks {
 
     publishPlugin {
         token.set(System.getenv("PUBLISH_TOKEN"))
+        channels.set(listOf("beta"))
     }
 }
