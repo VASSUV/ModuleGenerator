@@ -1,6 +1,6 @@
 package ru.vassuv.plugin.createfromtemplate.model
 
-import ru.vassuv.plugin.createfromtemplate.model.Const.KEY_WORD
+import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 import java.io.File
 
 private fun String.removeLast(value: Char) = takeIf { it.lastOrNull() == value }?.dropLast(1) ?: this
@@ -21,7 +21,7 @@ class Generator(
 
         File(templatePath).list()?.forEach { fileName ->
 
-            if (fileName != null && fileName != "$KEY_WORD.json") {
+            if (fileName != null && fileName != "$JSON_NAME_FILE.json") {
                 copyWithReplace(
                     targetPath = targetPath,
                     templatePath = templatePath,
@@ -84,12 +84,12 @@ class Generator(
             return properties[param]?.withReplacedProperties()?.invokeFunction(function)
         }
 
-        return this.trim().removePrefix("$KEY_WORD.").let { parametr ->
-            properties[parametr]?.withReplacedProperties()     // {{ cook.param }}
-                ?: invokeFunction(parametr, '.')       // {{ cook.param.function() }}
-                ?: invokeFunction(parametr, '|')       // {{ cook.param|function }}
+        return this.trim().takeIf { this.startsWith('.') }?.removePrefix(".")?.let { parametr ->
+            properties[parametr]?.withReplacedProperties()     // {{ .param }}
+                ?: invokeFunction(parametr, '.')       // {{ .param.function() }}
+                ?: invokeFunction(parametr, '|')       // {{ .param|function }}
                 ?: "{{$this}}"                                 // {{ ignore }}
-        }
+        } ?: "{{$this}}"
     }
 
     private fun String.withReplacedProperties(): String {

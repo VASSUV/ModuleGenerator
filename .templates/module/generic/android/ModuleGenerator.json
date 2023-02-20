@@ -1,0 +1,6 @@
+{
+    "module_dir_relative_to_root_project": "myfeature/mymodule",
+    "module_package_relative_to_app_package": "mymodule.mypackage",
+    "app_package": "com.example.app",
+    "module_package":  "{{ .app_package }}.{{ .module_package_relative_to_app_package }}"
+}

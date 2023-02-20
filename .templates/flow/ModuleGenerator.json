@@ -1,0 +1,6 @@
+{
+    "flow_name": "Register",
+    "feature_name": "Login",
+    "app_package": "com.example.app",
+    "flow_package": "{{.app_package}}.{{.feature_name|lower}}.routing.{{.flow_name|lower}}"
+}

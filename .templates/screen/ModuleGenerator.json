@@ -1,0 +1,6 @@
+{
+    "screen_name": "Register",
+    "feature_name": "Login",
+    "app_package": "com.example.app",
+    "screen_package": "{{.app_package}}.{{.feature_name|lower}}.ui.{{ .screen_name|lower }}"
+}

@@ -4,11 +4,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.swing.Swing
-import ru.vassuv.plugin.createfromtemplate.model.Const.KEY_WORD
+import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 import java.io.File
 
 class SettingsViewModel(
@@ -62,7 +61,7 @@ class SettingsViewModel(
         scope.launch {
             val gson = Gson()
             val mapType = object : TypeToken<Map<String, String>>() {}.type
-            val jsonText = File(selectedTemplate.value?.path + "/$KEY_WORD.json").readText()
+            val jsonText = File(selectedTemplate.value?.path + "/$JSON_NAME_FILE.json").readText()
             val rules: Map<String, String> = gson.fromJson(jsonText, mapType)
             _replaceableStrings.emit(rules.toList())
         }

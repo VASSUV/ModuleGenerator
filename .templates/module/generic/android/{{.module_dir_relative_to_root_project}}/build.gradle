@@ -1,0 +1,12 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: com.example.app.gradle.ConfigurationPlugin
+
+android {
+  namespace = "{{.module_package}}"
+}
+
+dependencies {
+  kapt Deps.toothpickProcessor
+}

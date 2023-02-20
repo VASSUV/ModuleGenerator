@@ -1,7 +1,7 @@
 package ru.vassuv.plugin.createfromtemplate.model
 
 object Const {
-    const val KEY_WORD = "cookiecutter"
+    const val JSON_NAME_FILE = "ModuleGenerator"
 
     const val CREATE_FROM_TEMPLATES = "Create from templates"
     const val CHOOSE_TEMPLATE = "Choose template"

@@ -18,8 +18,8 @@
 
      <em><b>To create a new template:</b><br>
      - open the folder ".template" in the root of the project<br>
-     - add a new folder with "cookiecutter.json" file with properties <br>
-       (example: /.templates/Demo/cookiecutter.json) <br>
+     - add a new folder with "ModuleGenerator.json" file with properties <br>
+       (example: /.templates/Demo/ModuleGenerator.json) <br>
      - add files and folders for your template to a new folder<br>
        (examples: /.tempalates/Demo/MyProject.txt , /.tempalates/Demo/MyFolder/MyFile.txt ) <br>
      </em>

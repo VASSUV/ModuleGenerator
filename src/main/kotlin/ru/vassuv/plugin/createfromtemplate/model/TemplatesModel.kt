@@ -3,8 +3,7 @@ package ru.vassuv.plugin.createfromtemplate.model
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import ru.vassuv.plugin.createfromtemplate.model.Const.KEY_WORD
-import java.util.ArrayList
+import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 
 class TemplatesModel(
     private val project: Project,
@@ -44,7 +43,7 @@ class TemplatesModel(
     }
 
     private fun TemplateTreeNode.optimizedTreeNode(): TemplateTreeNode? {
-        if (children.firstOrNull { it.value.name == "$KEY_WORD.json" } == null) {
+        if (children.firstOrNull { it.value.name == "$JSON_NAME_FILE.json" } == null) {
             val newChildren = children.optimize()
             if (newChildren.isEmpty()) {
                 return null
