@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectRootManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.swing.Swing
@@ -77,7 +78,7 @@ class SettingsViewModel(
             properties = _replaceableStrings.value.toMap()
         ).generate()
 
-        project.workspaceFile!!.parent.parent.refresh(true, true)
+        ProjectRootManager.getInstance(project).contentRoots.firstOrNull()?.refresh(true, true)
     }
 
     fun changeProperty(key: String, newValue: String) {

@@ -38,7 +38,7 @@ object Const {
             /build
         """.trimIndent()
         val README_FILE: String get() = """
-            There will be information about the module "{{.module.name}}"
+            There will be information about the module "{{.module_name}}"
         """.trimIndent()
         val ANDROID_MANIFEST_FILE: String get() = """
             <manifest />

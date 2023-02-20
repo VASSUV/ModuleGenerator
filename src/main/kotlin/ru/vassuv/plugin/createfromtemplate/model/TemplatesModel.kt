@@ -2,6 +2,7 @@ package ru.vassuv.plugin.createfromtemplate.model
 
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 import java.io.File
@@ -22,7 +23,10 @@ class TemplatesModel(
     }
 
     private fun loadTemplateTreeNodes(): List<TemplateTreeNode> {
-        val rootFolder = project.workspaceFile?.parent?.parent ?: return listOf()
+        val contentRoots = ProjectRootManager.getInstance(project).contentRoots
+        println("Content roots = ${contentRoots.size}")
+        val rootFolder = contentRoots.firstOrNull()
+            ?: return listOf()
         val templatesFolder = rootFolder.children.firstOrNull { it.isDirectory && it.name == ".templates" } ?: run {
             addDemo(rootFolder.path + "/.templates")
             rootFolder.refresh(false, true)
@@ -69,7 +73,7 @@ class TemplatesModel(
         val repository = File("$sourceFolderPath/{{.module_name}}Repository.kt")
         repository.writeText(Const.Demo.REPOSITORY_FILE)
 
-        val entityFolderPath = "$sourceFolderPath/.entity"
+        val entityFolderPath = "$sourceFolderPath/entity"
         File(entityFolderPath).mkdir()
         val entity = File("$entityFolderPath/{{.module_name}}.kt")
         entity.writeText(Const.Demo.REPOSITORY_ENTITY_FILE)
