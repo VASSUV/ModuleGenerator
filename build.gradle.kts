@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.vassuv.plugin.createfromtemplate"
-version = "0.1-alpha"
+version = "0.1.3"
 
 repositories {
     mavenCentral()
@@ -36,7 +36,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("212")
-//        untilBuild.set("222.*")
+        untilBuild.set("223.*")
     }
 
     signPlugin {
@@ -47,6 +47,5 @@ tasks {
 
     publishPlugin {
         token.set(System.getenv("PUBLISH_TOKEN"))
-        channels.set(listOf("beta"))
     }
 }
