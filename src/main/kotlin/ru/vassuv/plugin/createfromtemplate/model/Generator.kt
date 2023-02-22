@@ -66,10 +66,11 @@ class Generator(
     }
 
     private fun String.invokeFunction(function: String): String? {
-        return if(function.startsWith("replace")) {
-            val params = function.replaceBefore('(', "").split("[,()]".toRegex()).mapNotNull { it.trim().takeIf { it.isNotEmpty() } }
+        return if (function.startsWith("replace")) {
+            val params = function.replaceBefore('(', "").split("[,()]".toRegex())
+                .mapNotNull { it.trim().takeIf { it.isNotEmpty() } }
             when {
-                params.size != 2-> null
+                params.size != 2 -> null
                 params.first().isChar() && params.last().isChar() ->
                     replace(params.first()[1], params.last()[1])
                 params.first().isString() && params.last().isString() ->
@@ -79,9 +80,9 @@ class Generator(
                     )
                 else -> null
             }
-        } else if(function == "uppercase()" || function == "upper") {
+        } else if (function == "uppercase()" || function == "upper") {
             this.uppercase()
-        } else if(function == "lowercase()" || function == "lower") {
+        } else if (function == "lowercase()" || function == "lower") {
             this.lowercase()
         } else {
             null
@@ -91,28 +92,31 @@ class Generator(
     private fun String.propertyToValue(): String {
 
         fun invokeFunction(parametr: String, delimetr: Char): String? {
-            if(!parametr.contains(delimetr)) return null
+            if (!parametr.contains(delimetr)) return null
             val dotIndex = parametr.indexOf(delimetr)
             val param = parametr.substring(0, dotIndex)
             val function = parametr.substring(dotIndex + 1, parametr.length)
             return properties[param]?.withReplacedProperties()?.invokeFunction(function)
         }
 
-        return this.trim().takeIf { this.startsWith('.') }?.removePrefix(".")?.let { parametr ->
-            properties[parametr]?.withReplacedProperties()     // {{ .param }}
-                ?: invokeFunction(parametr, '.')       // {{ .param.function() }}
-                ?: invokeFunction(parametr, '|')       // {{ .param|function }}
-                ?: "{{$this}}"                                 // {{ ignore }}
-        } ?: "{{$this}}"
+        val parametr = this.trim().takeIf { it.startsWith('.') }?.removePrefix(".") ?: return "{{$this}}"
+        return properties[parametr]?.withReplacedProperties()     // {{ .param }}
+            ?: invokeFunction(parametr, '.')       // {{ .param.function() }}
+            ?: invokeFunction(parametr, '|')       // {{ .param|function }}
+            ?: "{{$this}}"
     }
 
     private fun String.withReplacedProperties(): String {
 
         var lastIndex = 0
         var startPropertyIndex = indexOf("{{", 0)
-        if(startPropertyIndex < 0) { return this }
+        if (startPropertyIndex < 0) {
+            return this
+        }
         var endPropertyIndex = indexOf("}}", startPropertyIndex)
-        if(endPropertyIndex < 0) { return this }
+        if (endPropertyIndex < 0) {
+            return this
+        }
         val builder = StringBuilder()
         while (endPropertyIndex > 0) {
             builder.append(this.substring(lastIndex, startPropertyIndex))
@@ -121,14 +125,14 @@ class Generator(
             lastIndex = endPropertyIndex + 2
             startPropertyIndex = indexOf("{{", lastIndex)
 
-            if(startPropertyIndex < 0) {
-                builder.append(this.substring(lastIndex, this.length ))
+            if (startPropertyIndex < 0) {
+                builder.append(this.substring(lastIndex, this.length))
                 break
             }
             endPropertyIndex = indexOf("}}", startPropertyIndex)
 
-            if(endPropertyIndex < 0) {
-                builder.append(this.substring(lastIndex, this.length ))
+            if (endPropertyIndex < 0) {
+                builder.append(this.substring(lastIndex, this.length))
                 break
             }
         }
