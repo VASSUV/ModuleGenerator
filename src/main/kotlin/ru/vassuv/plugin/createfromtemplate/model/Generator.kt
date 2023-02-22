@@ -1,5 +1,11 @@
 package ru.vassuv.plugin.createfromtemplate.model
 
+import com.intellij.lang.Language
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.impl.file.PsiDirectoryFactory
 import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 import java.io.File
 
@@ -7,6 +13,7 @@ private fun String.removeLast(value: Char) = takeIf { it.lastOrNull() == value }
 private fun String.removeFirst(value: Char) = takeIf { it.firstOrNull() == value }?.drop(1) ?: this
 
 class Generator(
+    private val project: Project,
     projectPath: String,
     targetPath: String,
     private val templatePath: String,
@@ -17,7 +24,9 @@ class Generator(
 
     fun generate() {
         val targetPath = "$projectPath/$targetPath"
-        File(targetPath).mkdirs()
+
+        val createDirectoryIfMissing = VfsUtil.createDirectoryIfMissing(targetPath)!!
+        PsiDirectoryFactory.getInstance(project).createDirectory(createDirectoryIfMissing)
 
         File(templatePath).list()?.forEach { fileName ->
 
@@ -37,7 +46,10 @@ class Generator(
         val newFileName = fileName.withReplacedProperties()
         val newTargetPath = "$targetPath/$newFileName"
         if (file.isDirectory) {
-            File(newTargetPath).mkdirs()
+
+            val createDirectoryIfMissing = VfsUtil.createDirectoryIfMissing(newTargetPath)!!
+            PsiDirectoryFactory.getInstance(project).createDirectory(createDirectoryIfMissing)
+
             println("Create new directory: $newTargetPath")
             file.list()?.forEach { name ->
                 copyWithReplace(newTargetPath, templateFilePath, name)
@@ -48,6 +60,8 @@ class Generator(
             newFile.createNewFile()
             val text = file.readText().withReplacedProperties()
             newFile.writeText(text)
+
+            LocalFileSystem.getInstance().refreshAndFindFileByIoFile(newFile)
         }
     }
 

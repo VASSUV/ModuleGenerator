@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.openapi.vfs.LocalFileSystem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.swing.Swing
@@ -72,13 +73,13 @@ class SettingsViewModel(
         val projectPath = project.basePath ?: return
         val templatePath = selectedTemplate.value?.path ?: return
         Generator(
+            project = project,
             projectPath = projectPath,
             targetPath = targetPath.value,
             templatePath = templatePath,
             properties = _replaceableStrings.value.toMap()
         ).generate()
 
-        ProjectRootManager.getInstance(project).contentRoots.firstOrNull()?.refresh(true, true)
     }
 
     fun changeProperty(key: String, newValue: String) {

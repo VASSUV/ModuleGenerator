@@ -3,6 +3,7 @@ package ru.vassuv.plugin.createfromtemplate.model
 import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
 import java.io.File
@@ -23,9 +24,8 @@ class TemplatesModel(
     }
 
     private fun loadTemplateTreeNodes(): List<TemplateTreeNode> {
-        val contentRoots = ProjectRootManager.getInstance(project).contentRoots
-        println("Content roots = ${contentRoots.size}")
-        val rootFolder = contentRoots.firstOrNull()
+        val basePath = project.basePath ?: return emptyList()
+        val rootFolder = LocalFileSystem.getInstance().findFileByPath(basePath)
             ?: return listOf()
         val templatesFolder = rootFolder.children.firstOrNull { it.isDirectory && it.name == ".templates" } ?: run {
             addDemo(rootFolder.path + "/.templates")
