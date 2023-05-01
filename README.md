@@ -1,5 +1,6 @@
 # ModuleGenerator
-Plugin for generating modules from templates
+
+[Intellij Idea Plugin](https://plugins.jetbrains.com/plugin/21100-segment-generator) for generating modules from templates
 
 ### To create a new template:
 
