@@ -32,6 +32,7 @@ import javax.swing.event.TableModelEvent
 import javax.swing.event.TableModelEvent.UPDATE
 import javax.swing.event.TableModelListener
 import javax.swing.table.DefaultTableModel
+import javax.swing.table.TableCellEditor
 
 
 class MyWizardStep2(private val viewModel: SettingsViewModel) : WizardStep<TemplateSettingsWizardModel>() {
@@ -45,6 +46,7 @@ class MyWizardStep2(private val viewModel: SettingsViewModel) : WizardStep<Templ
     private var pathLabel = JLabel(TARGET_PATH)
     private var pathField = JTextField("")
         .apply { isEnabled = false }
+
 
     private val tableColumns = arrayOf(PROPERTY, VALUE)
     private val tableModel = object: DefaultTableModel(tableColumns, 0) { }.apply {
@@ -91,6 +93,16 @@ class MyWizardStep2(private val viewModel: SettingsViewModel) : WizardStep<Templ
     }
 
     override fun onFinish(): Boolean {
+
+        if (replaceableStringsTable.isEditing) {
+            replaceableStringsTable.cellEditor.stopCellEditing()
+        }
+        if(replaceableStringsTable.selectedRow >= 0) {
+            val key = viewModel.replaceableStrings.value[replaceableStringsTable.selectedRow].first
+            val newValue = replaceableStringsTable.getValueAt(replaceableStringsTable.selectedRow, 1).toString()
+            viewModel.changeProperty(key, newValue)
+        }
+
         viewModel.generate()
         scope.coroutineContext.cancelChildren()
         job.cancel()
