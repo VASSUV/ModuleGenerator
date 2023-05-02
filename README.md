@@ -7,6 +7,8 @@
 - open the folder ".template" in the root of the project
 - add a new folder with "ModuleGenerator.json" file with properties
 
+**Important**, Existing files will be overwritten with files from the template.
+
 _(example: /.templates/Demo/ModuleGenerator.json)_
 
 - add files and folders for your template to a new folder
