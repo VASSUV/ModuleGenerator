@@ -86,8 +86,6 @@ class TemplatesModel(
         return templates.map { it.mapToTreeList() }.flatten()
     }
 
-
-
     private fun Array<VirtualFile>.mapToTreeNode(level: Int): List<TemplateTreeNode> {
         return map { file ->
             val template = Template(file.name, file.path, level, file.children.isNotEmpty())

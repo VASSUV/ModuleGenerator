@@ -6,7 +6,6 @@ object Const {
 
     const val CREATE_FROM_TEMPLATES = "Generate from templates"
     const val CHOOSE_TEMPLATE = "Choose template"
-    const val TEMPLATES = "Templates"
     const val TARGET_PATH = "Target path"
     const val SETTINGS_TEMPLATE = "Template Settings"
     const val VALUE_COLUMN_CAN_BE_EDITED = "* Value column can be edited"

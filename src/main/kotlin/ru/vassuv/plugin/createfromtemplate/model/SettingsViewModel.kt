@@ -2,16 +2,14 @@ package ru.vassuv.plugin.createfromtemplate.model
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.openapi.vfs.LocalFileSystem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.swing.Swing
 import ru.vassuv.plugin.createfromtemplate.model.Const.JSON_NAME_FILE
+import ru.vassuv.plugin.createfromtemplate.model.entity.Template
 import java.io.File
 
+@OptIn(DelicateCoroutinesApi::class)
 class SettingsViewModel(
     private val project: Project,
     private val path: String,
@@ -31,11 +29,11 @@ class SettingsViewModel(
     val replaceableStrings = _replaceableStrings.asStateFlow()
 
 
-    private val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.Swing + job + coroutineExceptionHandler)
+    private val scope = CoroutineScope(GlobalScope.coroutineContext + job + coroutineExceptionHandler)
 
     init {
         scope.launch {
@@ -51,7 +49,7 @@ class SettingsViewModel(
     fun changeSelectedTemplate(selectedValue: Template?) {
         if (selectedValue?.isTemplate == true) {
             _selectedTemplate.tryEmit(selectedValue)
-            if(_selectedTemplate.value?.isTemplate == true) {
+            if (_selectedTemplate.value?.isTemplate == true) {
                 updateReplaceableStrings()
             }
         } else {
@@ -64,7 +62,7 @@ class SettingsViewModel(
             val gson = Gson()
             val mapType = object : TypeToken<Map<String, String>>() {}.type
             val jsonText = File(selectedTemplate.value?.path + "/$JSON_NAME_FILE.json").readText()
-            val rules: Map<String, String> = gson.fromJson(jsonText, mapType)
+            val rules: Map<String, String> = gson.fromJson<Map<String, String>?>(jsonText, mapType)
             _replaceableStrings.emit(rules.toList())
         }
     }
@@ -83,6 +81,6 @@ class SettingsViewModel(
     }
 
     fun changeProperty(key: String, newValue: String) {
-        _replaceableStrings.tryEmit(_replaceableStrings.value.map { if(it.first == key) Pair(key, newValue) else it })
+        _replaceableStrings.tryEmit(_replaceableStrings.value.map { if (it.first == key) Pair(key, newValue) else it })
     }
 }
